@@ -10,17 +10,27 @@ jobs:
     # setup VM
     runs-on: ubuntu-latest
 
+    # GA permissions for logging into GCP
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
       # copy repo contents to VM
       - name: Checkout
         uses: actions/checkout@v3
+      # Login to GCP
+      - name: Login to GCP
+        uses: google-github-actions/auth@v1
+        id: 'auth'
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
       # deploy to App Engine
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1.2.7
         with:
           deliverables: app.yaml
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          credentials: ${{ secrets.GCP_SA_KEY }}
       # print to console
       - name: Print to console
         run: echo "Deployed!"
