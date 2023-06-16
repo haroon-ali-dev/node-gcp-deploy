@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express")
 const app = express();
 
 app.get("/", (req, res) => {
-    res.send("Deployed From GitHub Actions");
+    res.send(`Client Secret: ${process.env.CLIENT_SECRET}, API Secret: ${process.env.API_SECRET}`);
 });
 
 const port = process.env.PORT || 3001;
