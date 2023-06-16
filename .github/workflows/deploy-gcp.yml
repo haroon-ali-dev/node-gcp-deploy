@@ -1,0 +1,26 @@
+name: GCP Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # setup VM
+    runs-on: ubuntu-latest
+
+    steps:
+      # copy repo contents to VM
+      - name: Checkout
+        uses: actions/checkout@v3
+      # deploy to App Engine
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@1.2.7
+        with:
+          deliverables: app.yaml
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
+      # print to console
+      - name: Print to console
+        run: echo "Deployed!"
